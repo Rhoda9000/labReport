@@ -15,4 +15,10 @@ export class RequisitionService {
     localStorage.setItem('requisitions', JSON.stringify(requisitions));
     return of("Requisition saved successfully");
   }
+
+  doesRequisitionIdExist(requisitionId: string): Observable<boolean> {
+    const requisitions: Requisition[] = JSON.parse(localStorage.getItem('requisitions') || '[]');
+    const exists = requisitions.some(req => req.requisitionId === requisitionId);
+    return of(exists);
+  }
 }

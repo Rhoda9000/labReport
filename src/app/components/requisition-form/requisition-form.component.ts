@@ -5,6 +5,7 @@ import { Test } from '../../models/test.model';
 import { TestService } from '../../services/test/test.service';
 import { RequisitionService } from '../../services/requisition/requisition.service';
 import { Requisition } from '../../models/requisition.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-requisition-form',
@@ -14,14 +15,24 @@ import { Requisition } from '../../models/requisition.model';
   styleUrls: ['./requisition-form.component.scss']
 })
 export class RequisitionFormComponent implements OnInit {
-  requisitionForm: FormGroup;
+  requisitionForm!: FormGroup;
   availableTests: Test[] = [];
 
   constructor(
     private fb: FormBuilder,
     private testService: TestService,
-    private requisitionService: RequisitionService
-  ) {
+    private requisitionService: RequisitionService,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    this.initForm();
+    this.testService.getTests().subscribe(tests => {
+      this.availableTests = tests.filter(test => test.isActive);
+    });
+  }
+
+  initForm(): void {
     this.requisitionForm = this.fb.group({
       requisitionId: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
       timeSampleTaken: ['', Validators.required],
@@ -31,12 +42,6 @@ export class RequisitionFormComponent implements OnInit {
       dateOfBirth: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern(/^\+27\d{9}$/)]],
       requestedTests: this.fb.array([], Validators.required),
-    });
-  }
-
-  ngOnInit() {
-    this.testService.getTests().subscribe(tests => {
-      this.availableTests = tests.filter(test => test.isActive);
     });
   }
 
@@ -69,19 +74,30 @@ export class RequisitionFormComponent implements OnInit {
 
   onSubmit() {
     if (this.requisitionForm.valid) {
-      const requisition: Requisition = {
-        requisitionId: this.requisitionForm.value.requisitionId,
-        timeSampleTaken: this.requisitionForm.value.timeSampleTaken,
-        firstName: this.requisitionForm.value.firstName,
-        surname: this.requisitionForm.value.surname,
-        gender: this.requisitionForm.value.gender,
-        dateOfBirth: this.requisitionForm.value.dateOfBirth,
-        mobileNumber: this.requisitionForm.value.mobileNumber,
-        requestedTests: this.requisitionForm.value.requestedTests,
-      };
+      const requisitionId = this.requisitionForm.value.requisitionId;
 
-      this.requisitionService.saveRequisition(requisition).subscribe(response => {
-        this.requisitionForm.reset();
+      this.requisitionService.doesRequisitionIdExist(requisitionId).subscribe(exists => {
+        if (exists) {
+          alert(`The Requisition ID ${requisitionId} already exists. Please use a different ID.`);
+        } else {
+          const requisition: Requisition = {
+            requisitionId: this.requisitionForm.value.requisitionId,
+            timeSampleTaken: this.requisitionForm.value.timeSampleTaken,
+            firstName: this.requisitionForm.value.firstName,
+            surname: this.requisitionForm.value.surname,
+            gender: this.requisitionForm.value.gender,
+            dateOfBirth: this.requisitionForm.value.dateOfBirth,
+            mobileNumber: this.requisitionForm.value.mobileNumber,
+            requestedTests: this.requisitionForm.value.requestedTests,
+          };
+
+          this.requisitionService.saveRequisition(requisition).subscribe((response: string) => {
+            this.requisitionForm.reset();
+            if (confirm(response)) {
+              this.router.navigate(['']);
+            }
+          });
+        }
       });
     }
   }
