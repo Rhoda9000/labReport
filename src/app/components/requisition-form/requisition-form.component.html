@@ -1,0 +1,82 @@
+<div class="requisition-form">
+    <h2 class="form-title">New Requisition</h2>
+    <form [formGroup]="requisitionForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="requisitionId" class="form-label">Requisition ID:</label>
+                <input id="requisitionId" formControlName="requisitionId" type="text" class="form-input"
+                    placeholder="0001-9999" />
+                <div *ngIf="requisitionForm.get('requisitionId')?.invalid && requisitionForm.get('requisitionId')?.touched"
+                    class="error-message">
+                    Please enter a valid Requisition ID (four digits).
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="timeSampleTaken" class="form-label">Time Sample Taken:</label>
+                <input id="timeSampleTaken" formControlName="timeSampleTaken" type="datetime-local"
+                    class="form-input" />
+                <div *ngIf="requisitionForm.get('timeSampleTaken')?.invalid && requisitionForm.get('timeSampleTaken')?.touched"
+                    class="error-message">
+                    Time Sample Taken is required.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName" class="form-label">First Name:</label>
+                <input id="firstName" formControlName="firstName" type="text" class="form-input" />
+                <div *ngIf="requisitionForm.get('firstName')?.invalid && requisitionForm.get('firstName')?.touched"
+                    class="error-message">
+                    First Name is required.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="surname" class="form-label">Surname:</label>
+                <input id="surname" formControlName="surname" type="text" class="form-input" />
+                <div *ngIf="requisitionForm.get('surname')?.invalid && requisitionForm.get('surname')?.touched"
+                    class="error-message">
+                    Surname is required.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="gender" class="form-label">Gender (M/F/U):</label>
+                <input id="gender" formControlName="gender" type="text" class="form-input" />
+                <div *ngIf="requisitionForm.get('gender')?.invalid && requisitionForm.get('gender')?.touched"
+                    class="error-message">
+                    Please enter M, F, or U.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dateOfBirth" class="form-label">Date of Birth:</label>
+                <input id="dateOfBirth" formControlName="dateOfBirth" type="date" class="form-input" />
+                <div *ngIf="requisitionForm.get('dateOfBirth')?.invalid && requisitionForm.get('dateOfBirth')?.touched"
+                    class="error-message">
+                    Date of Birth is required.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mobileNumber" class="form-label">Mobile Number:</label>
+                <input id="mobileNumber" formControlName="mobileNumber" type="text" class="form-input"
+                    placeholder="+27" />
+                <div *ngIf="requisitionForm.get('mobileNumber')?.invalid && requisitionForm.get('mobileNumber')?.touched"
+                    class="error-message">
+                    Please enter a valid mobile number.
+                </div>
+            </div>
+        </div>
+
+        <h3>Available Tests:</h3>
+        <ul>
+            <li *ngFor="let test of availableTests">
+                <input type="checkbox" (change)="addTest(test)" [disabled]="isTestConflict(test)" />
+                {{ test.description }}
+            </li>
+        </ul>
+
+        <button type="submit" class="submit-button" [disabled]="!requisitionForm.valid">Submit Requisition</button>
+    </form>
+</div>
