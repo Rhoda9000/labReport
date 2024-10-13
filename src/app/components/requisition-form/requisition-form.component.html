@@ -41,11 +41,21 @@
             </div>
 
             <div class="form-group">
-                <label for="gender" class="form-label">Gender (M/F/U):</label>
-                <input id="gender" formControlName="gender" type="text" class="form-input" />
+                <label class="form-label">Gender:</label>
+                <div>
+                    <label>
+                        <input type="radio" formControlName="gender" value="M" /> Male
+                    </label>
+                    <label>
+                        <input type="radio" formControlName="gender" value="F" /> Female
+                    </label>
+                    <label>
+                        <input type="radio" formControlName="gender" value="U" /> Unspecified
+                    </label>
+                </div>
                 <div *ngIf="requisitionForm.get('gender')?.invalid && requisitionForm.get('gender')?.touched"
-                    class="error-message">
-                    Please enter M, F, or U.
+                     class="error-message">
+                    Please select M, F, or U.
                 </div>
             </div>
 

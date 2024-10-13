@@ -18,6 +18,6 @@ export class TestService {
   constructor() { }
 
   getTests(): Observable<Test[]> {
-    return of(this.tests);
+    return of(this.tests.filter(test => test.isActive));
   }
 }

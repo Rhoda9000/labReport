@@ -28,7 +28,7 @@ export class RequisitionFormComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.testService.getTests().subscribe(tests => {
-      this.availableTests = tests.filter(test => test.isActive);
+      this.availableTests = tests;
     });
   }
 

@@ -1,0 +1,41 @@
+<div class="requisition-form">
+    <h2 class="form-title">Capture Test Results</h2>
+
+    <form [formGroup]="testResultsForm" (ngSubmit)="updateTestResults()">
+        <div class="form-group">
+            <label class="form-label" for="requisitionSelect">Select Requisition</label>
+            <select class="form-select" id="requisitionSelect" formControlName="requisitionSelect"
+                (change)="onRequisitionChange()">
+                <option value="" disabled selected>Select a requisition</option>
+                <option *ngFor="let req of requisitions" [value]="req.requisitionId">
+                    {{ req.requisitionId }}
+                </option>
+            </select>
+            <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        </div>
+
+        <div *ngIf="selectedRequisitionId">
+            <h3 class="form-title">Test Results for Requisition ID: {{ selectedRequisitionId }}</h3>
+            <div formArrayName="testResults">
+                <div *ngFor="let testControl of testResultsArray.controls; let i = index" [formGroupName]="i">
+                    <div class="form-group">
+                        <label class="form-label">{{ tests[i]?.description }}</label>
+                        <input type="text" class="form-input" formControlName="result" placeholder="Enter result" />
+                        <div *ngIf="testControl.get('result')?.invalid && (testControl.get('result')?.touched || testControl.get('result')?.dirty)"
+                            class="error-message">
+                            Result is required.
+                        </div>
+                        <input type="text" class="form-input" formControlName="comment" placeholder="Enter comment" />
+                        <div *ngIf="testControl.get('comment')?.invalid && (testControl.get('comment')?.touched || testControl.get('comment')?.dirty)"
+                            class="error-message">
+                            Comment is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button" [disabled]="testResultsForm.invalid">Update Test Results</button>
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+    </form>
+</div>

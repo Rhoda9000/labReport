@@ -1,3 +1,5 @@
+import { Request } from './request.model';
+
 export interface Requisition {
     requisitionId: string;
     timeSampleTaken: Date;
