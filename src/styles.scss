@@ -3,6 +3,7 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
+.report-form,
 .requisition-form,
 .capture-form {
     max-width: 600px;
@@ -34,7 +35,7 @@ body {
 
 .form-input,
 .form-select {
-    width: 90%;
+    width: 100%;
     padding: 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 0.25rem;

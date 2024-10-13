@@ -1,4 +1,4 @@
-<div class="requisition-form">
+<div class="capture-form">
     <h2 class="form-title">Capture Test Results</h2>
 
     <form [formGroup]="testResultsForm" (ngSubmit)="updateTestResults()">
@@ -19,7 +19,7 @@
             <div formArrayName="testResults">
                 <div *ngFor="let testControl of testResultsArray.controls; let i = index" [formGroupName]="i">
                     <div class="form-group">
-                        <label class="form-label">{{ tests[i]?.description }}</label>
+                        <label class="form-label">{{ tests[i].description }}</label>
                         <input type="text" class="form-input" formControlName="result" placeholder="Enter result" />
                         <div *ngIf="testControl.get('result')?.invalid && (testControl.get('result')?.touched || testControl.get('result')?.dirty)"
                             class="error-message">

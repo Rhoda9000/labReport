@@ -1,0 +1,33 @@
+<div class="report-form">
+    <h2 class="form-title">Generate Medical Report</h2>
+    <form [formGroup]="reportForm" (ngSubmit)="onGenerateReport()">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="requisitionId" class="form-label">Requisition ID:</label>
+                <select id="requisitionId" formControlName="requisitionId" class="form-select">
+                    <option value="" disabled>Select Requisition ID</option>
+                    <option *ngFor="let id of requisitionIds" [value]="id">{{ id }}</option>
+                </select>
+                <div *ngIf="reportForm.controls['requisitionId'].invalid && reportForm.controls['requisitionId'].touched"
+                    class="error-message">
+                    Please select a Requisition ID.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reportType" class="form-label">Report Type:</label>
+                <select id="reportType" formControlName="reportType" class="form-select">
+                    <option value="" disabled>Select Report Type</option>
+                    <option value="json">JSON File</option>
+                    <option value="pdf">PDF File</option>
+                </select>
+                <div *ngIf="reportForm.controls['reportType'].invalid && reportForm.controls['reportType'].touched"
+                    class="error-message">
+                    Please select a report type.
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button" [disabled]="!reportForm.valid">Generate Report</button>
+    </form>
+</div>
