@@ -28,15 +28,16 @@ export class ReportService {
     );
   }
 
-  generateReport(requisition: Requisition, reportType: string): void {
+  generateReport(requisition: Requisition, reportType: string): Promise<string> {
     if (reportType === 'json') {
-      this.generateJSONReport(requisition);
+      return this.generateJSONReport(requisition);
     } else if (reportType === 'pdf') {
-      this.generatePDFReport(requisition);
+      return this.generatePDFReport(requisition);
     }
+    return Promise.reject('Invalid report type');
   }
 
-  private async generateJSONReport(requisition: Requisition): Promise<void> {
+  private async generateJSONReport(requisition: Requisition): Promise<string> {
     const jsonData = JSON.stringify(requisition, null, 2);
     const blob = new Blob([jsonData], { type: 'application/json' });
 
@@ -66,10 +67,10 @@ export class ReportService {
       a.click();
       URL.revokeObjectURL(url);
     }
-    alert(`${requisition.requisitionId} report saved successfully.`);
+    return `${requisition.requisitionId} report saved successfully.`;
   }
 
-  private async generatePDFReport(requisition: Requisition): Promise<void> {
+  private async generatePDFReport(requisition: Requisition): Promise<string> {
     const doc = new jsPDF();
 
     this.addPDFHeader(doc);
@@ -100,7 +101,7 @@ export class ReportService {
       // Fallback for browsers that do not support showSaveFilePicker
       doc.save(`Requisition_${requisition.requisitionId}_${this.formatDate(requisition.timeSampleTaken)}.pdf`);
     }
-    alert(`${requisition.requisitionId} report saved successfully.`);
+    return `${requisition.requisitionId} report saved successfully.`;
   }
 
   private addPDFHeader(doc: jsPDFDocument): void {

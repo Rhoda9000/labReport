@@ -47,7 +47,9 @@ export class ReportGeneratorComponent {
       const { requisitionId, reportType } = this.reportForm.value;
       const requisition = this.requisitions.find((req) => req.requisitionId === requisitionId);
       if (requisition) {
-        this.reportService.generateReport(requisition, reportType);
+        this.reportService.generateReport(requisition, reportType).then((msg: string) => {
+          alert(msg);
+        })
       } else {
         alert('Requisition not found');
       }
